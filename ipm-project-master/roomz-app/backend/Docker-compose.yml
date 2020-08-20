@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  roomz-api:
+    build:
+      context: .
+    image: roomz-api
+    container_name: roomz-api
+    ports:
+      - "8080:8080"
+    networks:
+      - roomz-api
+      - roomz-db
+    depends_on:
+      - roomz-db
+
+  roomz-db:
+    image: postgres
+    container_name: roomz-db
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: roomzdb
+    restart: unless-stopped
+    volumes:
+      - roomz_db:/var/lib/postgresql/data
+    networks:
+      - roomz-db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: roomz-pgadmin
+    depends_on:
+      - roomz-db
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    restart: unless-stopped
+    networks:
+      - roomz-api
+
+volumes:
+  postgres-data:
+
+networks:
+  backend:
+  frontend:

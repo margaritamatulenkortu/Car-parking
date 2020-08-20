@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="healthcheck" format="json">
+      <types:shape format="weave" example="examples/new 1.json"><![CDATA[%dw 2.0
+
+type healthcheck = {|
+  hostname: String, 
+  available: String, 
+  total: String, 
+  cpu: String, 
+  message: String
+|} {"example": "{\\\"hostname\\\":\\\"get_hostname()\\\",\\\"available\\\":\\\"psutil.virtual_memory().available\\\",\\\"total\\\":\\\"psutil.virtual_memory().total\\\",\\\"cpu\\\":\\\"psutil.cpu_percent()\\\",\\\"message\\\":\\\"Hello from Flask\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#2711ed1b-d9e5-44cf-bfe8-f744f183b93b">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="healthcheck"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#b636d5b2-c991-4551-a3fe-c4aab34acc3e">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="healthcheck"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

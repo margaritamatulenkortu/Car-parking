@@ -1,0 +1,44 @@
+# roomz application services definition
+x-app-roomz-services: &app-roomz-services
+  roomz-ui:
+    build:
+      context: ../../roomz-app/frontend/
+    image: roomz-ui:latest
+    container_name: roomz-ui
+    mem_limit: 100M
+    memswap_limit: 200M
+    depends_on:
+      - roomz-api
+    networks:
+      - roomz-api
+    ports:
+      - "7003:80"
+      
+  roomz-api:
+    build:
+      context: ../../roomz-app/backend/
+    image: roomz-api
+    container_name: roomz-api    
+    mem_limit: 384M
+    memswap_limit: 768M      
+    networks:
+      - roomz-api
+      - roomz-db
+    ports:
+      - "7008:80"
+    depends_on:
+      - roomz-db
+  roomz-db:
+    image: postgres
+    hostname: postgres  
+    container_name: roomz-db
+    mem_limit: 100M
+    memswap_limit: 200M      
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: roomzdb
+    volumes:
+      - roomz_db:/var/lib/postgresql/data    
+    networks:
+      - roomz-db

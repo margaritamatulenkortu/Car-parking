@@ -1,0 +1,15 @@
+# api gateway used by main frontend application
+x-il-api-gw-services: &il-api-gw-services
+    eg-gateway:
+        build:
+            context: ../../infrastructure/api-gw/
+        image: express-gateway
+        restart: unless-stopped
+        container_name: il-api-gw
+        mem_limit: 300M
+        memswap_limit: 600M      
+        networks:
+            ipm-api:
+            ipm-integration:
+            <<: *all-ipm-apps-api-networks    
+            

@@ -1,0 +1,8 @@
+version: "2.4"
+services:
+    sag-is:
+        build:
+            context: .
+        image: demo-sag-ms-runtime
+        ports:
+            - 5556:5555

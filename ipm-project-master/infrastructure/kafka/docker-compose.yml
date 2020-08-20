@@ -1,0 +1,33 @@
+version: "2.4"
+services: 
+  zookeeper:
+    build: 
+      context: .
+    image: kafka_base:1.0
+    container_name: zookeeper
+    volumes: 
+      - zookeeperdata:/tmp/zookeeper
+    networks: 
+      - kafka_net
+    entrypoint: ["/opt/kafka/bin/zookeeper-server-start.sh", "/opt/kafka/config/zookeeper.properties"]
+  kafka_node:
+    image: kafka_base:1.0
+    container_name: kafka-node
+    entrypoint: ["/opt/kafka/bin/kafka-server-start.sh", "/opt/kafka/config/server.properties"]
+    ports: 
+      - "9092:9092"
+      #- "26092:26092" this port is used for internal communication in docker network
+    volumes: 
+      - kafka_node_logs:/tmp/kafka-logs
+    networks: 
+      - kafka_net
+      - logging
+
+volumes: 
+  zookeeperdata:
+  kafka_node_logs:
+networks: 
+  kafka_net:
+    name: kafka-network
+  logging:
+    name: logging-network

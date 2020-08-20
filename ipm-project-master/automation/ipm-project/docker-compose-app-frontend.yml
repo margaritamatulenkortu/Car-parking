@@ -1,0 +1,15 @@
+
+x-app-frontend: &app-frontend
+    frontend:
+        build:
+            context: ../../frontend
+        image: frontend:lastest
+        networks:
+            - frontend-ui
+            - ipm-api
+            - roomz-api
+            - badge-api
+            - car-parking-api
+        ports:
+            - "3000:80"
+            

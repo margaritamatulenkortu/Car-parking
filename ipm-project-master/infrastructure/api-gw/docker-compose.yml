@@ -1,0 +1,22 @@
+version: "2.4"
+services:
+    eg-gateway:
+        image: express-gateway
+        volumes:
+            - ./config:/var/lib/eg
+        networks:
+            - app1
+            - app2
+            - app3
+        ports:
+            - 8088:8080
+            # admin port is disabled - not exposed
+            #- 9876:9876
+
+networks:
+    app1:
+        name: demo-microservices_app1
+    app2:
+        name: demo-microservices_app2
+    app3:
+        name: demo-microservices_app3        

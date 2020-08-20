@@ -1,0 +1,17 @@
+**/target/
+test-apps/
+car-parking/backend/RestService/.idea/
+*.bat
+*.gradle
+car-parking/backend/RestService/gs-rest-service/complete/
+car-parking/backend/RestService/RestService.iml
+car-parking/backend/RestService/.idea/workspace.xml
+car-parking/backend/RestService/.idea/workspace.xml
+car-parking/frontend carparking/Car-parking-react-frontend/node_modules/
+car-parking/backend/RestService/.idea/libraries/Maven__org_flywaydb_flyway_core_6_4_4.xml
+**/deploy.yml
+**/deploy*.yml
+**/*.log
+.idea
+.mvn
+car-parking/backend/RestService/.idea/workspace.xml

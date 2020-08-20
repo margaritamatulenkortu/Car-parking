@@ -1,0 +1,48 @@
+# car parking application
+x-app-car-parking-services: &app-car-parking-services
+    car-parking-ui:
+      build:
+        context: ../../car-parking/frontend/Car-parking-react-frontend
+        args:
+            USE_CONFIG: nginx-docker.conf
+      image: car-parking-ui    
+      restart: unless-stopped 
+      container_name: car-parking-ui 
+      mem_limit: 50M
+      memswap_limit: 100M         
+      networks:
+        - car-parking-ui
+        - car-parking-api    
+      ports:
+        - "7001:80"
+
+    car-parking-api:
+      build:
+        context: ../../car-parking/backend/RestService/
+        args:
+            USE_CONFIG: application-docker.yml
+      image: car-parking-api 
+      restart: unless-stopped
+      container_name: car-parking-api         
+      mem_limit: 384M
+      memswap_limit: 768M     
+      depends_on:
+        - car-parking-db  
+      networks: 
+        - car-parking-api
+        - car-parking-db
+      
+    car-parking-db:
+      image: postgres
+      container_name: car-parking-db
+      hostname: postgres 
+      mem_limit:  100M
+      memswap_limit: 200MB    
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: postgres
+      volumes:
+        - car_parking_db:/var/lib/postgresql/data      
+      networks: 
+        - car-parking-db 

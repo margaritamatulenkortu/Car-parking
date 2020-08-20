@@ -1,0 +1,60 @@
+version: '2.4'
+
+services:
+  roomz-ui:
+    build:
+      context: ./frontend
+    image: roomz-ui:latest
+    depends_on:
+      - roomz-api
+    networks:
+      - roomz-api
+    ports:
+      - "7003:80"
+
+  roomz-api:
+    build:
+      context: ./backend
+    image: roomz-api
+    ports:
+      - "8080:8080"
+    networks:
+      - roomz-api
+    depends_on:
+      - roomz-db
+
+  roomz-db:
+    image: postgres
+    hostname: postgres
+    container_name: roomz-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: roomzdb
+#    volumes:
+#      - /postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - roomz-api
+
+  roomz-pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - roomz-db
+    ports:
+      - "5556:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    restart: unless-stopped
+    networks:
+      - roomz-api
+
+volumes:
+  postgres-data:
+
+networks:
+  roomz-api:
+  roomz-ui:

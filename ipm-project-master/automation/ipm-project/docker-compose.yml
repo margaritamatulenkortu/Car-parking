@@ -1,0 +1,5 @@
+version: "2.4"
+x-services:
+  test-node:
+    image: nginx:alpine
+    container_name: automation-test-container

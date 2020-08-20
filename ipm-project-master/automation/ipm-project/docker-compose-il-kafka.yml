@@ -1,0 +1,28 @@
+# apache kafka
+x-il-kafka-services: &il-kafka-services
+  zookeeper:    
+    image: kafka_base:1.0
+    restart: unless-stopped
+    container_name: zookeeper
+    volumes: 
+      - il_kafka_zookeeper_data:/tmp/zookeeper
+    networks: 
+      il-kafka:
+    entrypoint: ["/opt/kafka/bin/zookeeper-server-start.sh", "/opt/kafka/config/zookeeper.properties"]
+  kafka-node:
+    build:
+      context: ../../infrastructure/kafka/
+      args:
+        KAFKA_EXTERNAL_HOST: 10.125.22.135:9092
+    image: kafka_base:1.0
+    restart: unless-stopped
+    container_name: kafka-node
+    mem_limit: 600M
+    memswap_limit: 1200M      
+    entrypoint: ["/opt/kafka/bin/kafka-server-start.sh", "/opt/kafka/config/server.properties"]
+    ports: 
+      - "9092:9092"    
+    networks: 
+      il-kafka:
+      ipm-integration:
+      <<: *all-ipm-apps-api-networks    

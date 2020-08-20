@@ -1,0 +1,27 @@
+spring:
+  profiles: automation
+  datasource:
+    url: jdbc:postgresql://roomz-db:5432/roomzdb
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  flyway:
+    user: postgres
+    password: postgres
+    url: jdbc:postgresql://roomz-db:5432/roomzdb
+    enabled: true
+    check-location: false
+    locations: /db/migration/postgresql
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+
+logging.level.root: INFO
+logging.level.org.springframework.web: INFO
+logging.level.org.hibernate: INFO
+logging.level.com.demo.api: INFO
+logging.level.com.demo.service: INFO
+logging.config: classpath:log4j2-production.xml

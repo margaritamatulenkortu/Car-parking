@@ -1,0 +1,27 @@
+# start of volumes definition
+# volume names should be in format word_word2_word_3 - using underscore as a separator
+x-app-car-parking-volumes: &app-car-parking-volumes
+    car_parking_db:
+
+x-app-badge-volumes: &app-badge-volumes
+    badge_db:
+
+x-app-roomz-volumes: &app-roomz-volumes
+    roomz_db:
+        
+# volumes defined by the infrastructure        
+x-il-elk-volumes: &il-elk-volumes
+    elk_search_data:
+
+x-il-kafka-volumes: &il-kafka-volumes
+    il_kafka_zookeeper_data:
+
+volumes:
+    <<: *il-elk-volumes
+    <<: *il-kafka-volumes
+    # application data volumes
+    <<: *app-car-parking-volumes
+    <<: *app-badge-volumes
+    <<: *app-roomz-volumes
+
+# end of volumes definition

@@ -1,0 +1,76 @@
+http:
+  port: 5555
+admin:
+  port: 9876
+  host: 0.0.0.0
+apiEndpoints:
+  healthcheck:
+    host: '*'
+    paths:
+      - '/gateway/app1/1.0/*'
+      - '/gateway/app2/1.0/*'
+      - '/gateway/app3/1.0/*'
+  # see: http://www.express-gateway.io/docs/configuration/gateway.config.yml/apiEndpoints
+serviceEndpoints:
+  #this is to demonstrate how APIs can be organized using API management
+  app1:
+    url: 'http://demo-microservices-app1:5000/healthcheck'
+  app2:
+    url: 'http://demo-microservices-app2:3000'
+  app3:
+    url: 'http://demo-microservices-app3:8080/1.0/healthcheck/stat'      
+  # see: http://www.express-gateway.io/docs/configuration/gateway.config.yml/serviceEndpoints
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2 
+  - proxy
+  - rate-limit
+pipelines:
+  # see: https://www.express-gateway.io/docs/configuration/gateway.config.yml/pipelines
+  ms_routing:
+    apiEndpoints:
+      - healthcheck    
+    policies:
+      -
+        log: # policy name
+        - action:    # array of condition/actions objects
+            message: ${req.method} ${req.originalUrl} ${req.baseUrl} ${req.path} # parameter for log action            
+      -
+        proxy:
+          - 
+            condition:
+              name: pathMatch
+              pattern: "^/gateway/app1/"
+            action:             
+              prependPath: true
+              ignorePath: true
+              stripPath: false
+              serviceEndpoint: app1
+      -
+        proxy:
+          -  
+            condition:
+              name: pathMatch
+              pattern: "^/gateway/app2/"
+            action:     
+              prependPath: true
+              ignorePath: true         
+              stripPath: false         
+              serviceEndpoint: app2            
+
+      -
+        proxy:
+          -            
+            condition:
+              name: pathMatch
+              pattern: "^/gateway/app3/"
+            action:  
+              prependPath: true
+              ignorePath: true
+              stripPath: false            
+              serviceEndpoint: app3       
+  

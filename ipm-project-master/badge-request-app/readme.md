@@ -1,0 +1,1 @@
+To launch the backend and frontend, open Powershell/Terminal in this folder and run *docker-compose up* .

@@ -1,0 +1,1 @@
+To deploy packages simply export package from the webMethods designer and put it into the packages folder it will be unzipped and loaded during the startup.

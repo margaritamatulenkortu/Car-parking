@@ -1,0 +1,60 @@
+# badge application services definition
+x-app-badge-services: &app-badge-services
+  badge-ui:
+    build:
+      context: ../../badge-request-app/frontend/self-request-frontend/.
+    image: badge-ui:latest
+    container_name: badge-ui
+    mem_limit: 100M
+    memswap_limit: 200MB
+    depends_on:
+      - badge-api
+    networks:
+      - badge-ui
+    ports:
+      - "7002:80"
+
+  badge-api:
+    build:
+      context: ../../badge-request-app/backend/self-request-service/.
+    image: badge-api:latest
+    container_name: badge-api
+    mem_limit: 384M
+    memswap_limit: 768M
+    # depends_on:
+    #   - badge-db
+    ports:
+      - "8085:8085"
+    networks:
+      - badge-ui
+      - badge-api
+
+  # badge-db:
+  #   image: mysql:latest
+  #   ports:
+  #     - "3306:3306"
+  #   container_name: badge-db
+  #   mem_limit: 400M
+  #   memswap_limit: 400MB
+  #   environment:
+  #     MYSQL_DATABASE: self_request
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: abc123
+  #     MYSQL_ROOT_PASSWORD: abc123
+  #   volumes:
+  #     - badge_db:/var/lib/mysql
+  #   networks:
+  #     - badge-api
+      
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   links:
+  #     - badge-db:badge-db
+  #   ports:
+  #     - 8000:80
+  #   environment:
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: abc123
+  #     MYSQL_ROOT_PASSWORD: abc123
+  #   networks:
+  #     - badge-api

@@ -1,0 +1,3 @@
+for application deployment put your mulesoft project into the mule-apps folder (check example project). There could be issues with the build if any specific dependencies used, so please check it on local before the commit using `docker build -t test .` from the mule-apps folder
+
+as a requirement `mule-server:latest` should be present in the local docker images. to build it use folder from the sharepoint and `docker-compose build`

@@ -1,0 +1,12 @@
+services:
+    <<: *il-kafka-services
+    <<: *il-elk-services
+    <<: *il-mule-services
+    <<: *il-sag-is-services
+    <<: *il-api-gw-services
+    # ipm project apps
+    <<: *app-car-parking-services
+    <<: *app-badge-services
+    <<: *app-roomz-services
+    <<: *app-frontend
+

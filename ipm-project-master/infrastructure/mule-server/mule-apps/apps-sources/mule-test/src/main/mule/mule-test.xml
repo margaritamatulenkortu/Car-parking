@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="876d5974-a39b-46c0-9d4c-29323e603a53" basePath="/api" >
+		<http:listener-connection host="0.0.0.0" port="6066" />
+	</http:listener-config>
+	<flow name="mule-testFlow" doc:id="88d2971e-ae0c-40a0-af92-313b494d6cc2" >
+		<http:listener doc:name="Listener" doc:id="2c13a7ed-eff6-4932-8b12-ca8524fee446" config-ref="HTTP_Listener_config" path="/healthcheck" outputMimeType="application/json" allowedMethods="GET"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="2711ed1b-d9e5-44cf-bfe8-f744f183b93b" />
+		<ee:transform doc:name="Transform Message" doc:id="b636d5b2-c991-4551-a3fe-c4aab34acc3e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	hostname: server.host,
+	available: 222233,
+	total: 11111111,
+	cpu: 2,
+	message: "-aaaaa-zzzz------"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

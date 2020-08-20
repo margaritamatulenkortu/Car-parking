@@ -1,0 +1,51 @@
+# elasticsearch, logstash, kibana
+x-il-elk-services: &il-elk-services
+    elk-search:
+        image: elasticsearch:7.7.0
+        container_name: elk-search
+        mem_limit: 2048M
+        memswap_limit: 4096M   
+        restart: unless-stopped
+        environment:
+            discovery.type: single-node
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - elk_search_data:/usr/share/elasticsearch/data        
+        networks:
+            - il-elk
+    elk-kibana:
+        image: kibana:7.7.0
+        container_name: elk-kibana
+        mem_limit: 1024M
+        memswap_limit: 2048M   
+        restart: unless-stopped
+        environment:
+            ELASTICSEARCH_HOSTS: http://elk-search:9200        
+        networks:
+            - il-elk
+        ports:
+            - "5601:5601"
+        depends_on:
+            - elk-search
+    elk-log:
+        build:
+            context: ../../infrastructure/elk/
+            dockerfile: Dockerfile-logstash        
+        image: elk-log:latest
+        container_name: elk-log
+        mem_limit: 2048M
+        memswap_limit: 4096M  
+        restart: unless-stopped
+        environment:
+            monitoring.elasticsearch.hosts: "http://elk-search:9200"
+            xpack.monitoring.enabled: "false"        
+        networks:
+            il-elk:
+            il-elk-logstash:
+            ipm-integration:
+            il-kafka:
+            <<: *all-ipm-apps-api-networks
+     

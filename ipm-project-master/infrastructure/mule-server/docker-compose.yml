@@ -1,0 +1,12 @@
+version: "2.4"
+services:    
+    mule-server-apps:
+        build:
+            context: mule-apps
+        #to build this image use mule-server from the examples in the sharepoint
+        image: mule-server:latest
+        ports:
+            - "6066:6066"
+            - "6067:6067"
+        
+        

@@ -1,0 +1,5 @@
+logs/
+images/
+src/main/resources/db/migration/h2/
+src/main/resources/application.yml
+src/main/resources/application-dev.yml

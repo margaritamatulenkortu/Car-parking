@@ -1,0 +1,2 @@
+# this will configure github runner with new token
+docker run --rm -it -v runner_config:/home/github-runner cts-internship-runner:latest ./config.sh --url https://github.com/internshipseason2020/ipm-project --token %1

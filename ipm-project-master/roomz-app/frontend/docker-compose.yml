@@ -1,0 +1,13 @@
+version: '3'
+services:
+    roomz-ui:
+        build:
+            context: .
+        image: frontend-prod:lastest
+        networks:
+            - roomz-ui-networks
+        ports:
+            - 7003:80"
+
+networks: 
+    roomz-ui-networks:

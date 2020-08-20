@@ -1,0 +1,112 @@
+version: "3"
+services:
+    user-ui:
+        build:
+            context: .
+        image: user-ui:latest
+        networks:
+            - roomz-api
+            - car-parking-api
+        ports:
+            - "3000:80"
+
+    car-parking-api:
+        build:
+            context: ../car-parking/backend/RestService/
+        image: car-parking-api
+        ports:
+            - "8081:8080"
+        depends_on:
+            - car-parking-db
+        networks:
+            - car-parking-api
+            - car-parking-db
+
+    car-parking-db:
+        image: postgres
+        container_name: car-parking-db
+        hostname: postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: parkdb
+        volumes:
+            - car_parking_db:/var/lib/postgresql/data
+        networks:
+            - car-parking-db
+
+    roomz-api:
+        build:
+            context: ../roomz-app/backend/
+        image: roomz-api
+        container_name: roomz-api
+        networks:
+            - roomz-api
+            - roomz-db
+        ports:
+            - "8080:8080"
+        depends_on:
+            - roomz-db
+    roomz-db:
+        image: postgres
+        hostname: postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: roomzdb
+        volumes:
+            - roomz_db:/var/lib/postgresql/data
+        networks:
+            - roomz-db
+
+    badge-api:
+        build:
+            context: ../badge-request-app/backend/self-request-service/.
+        image: badge-api 
+        ports:
+        - "8085:8085" 
+        restart: always
+        depends_on: 
+        - badge-db
+        networks: 
+        - badge-api
+
+    badge-db:
+        image: mysql:latest
+        ports:
+        - "3306:3306"
+        restart: always
+        environment:
+            MYSQL_DATABASE: self_request
+            MYSQL_USER: root
+            MYSQL_PASSWORD: abc123
+            MYSQL_ROOT_PASSWORD: abc123
+        volumes:
+        - badge-db:/var/lib/mysql
+        networks:
+        - badge-api  
+        
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+        - badge-db:badge-db
+        ports:
+        - 8000:80
+        environment:
+            MYSQL_USER: root
+            MYSQL_PASSWORD: abc123
+            MYSQL_ROOT_PASSWORD: abc123
+        networks:
+        - badge-api
+
+volumes:
+    car_parking_db:
+    roomz_db:
+    badge-db:
+
+networks:
+    roomz-api:
+    badge-api:
+    roomz-db:
+    car-parking-api:
+    car-parking-db:

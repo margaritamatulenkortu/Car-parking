@@ -1,0 +1,66 @@
+version: "2.4"
+services: 
+    elk_search:
+        image: elasticsearch:7.7.0
+        container_name: elk-search
+        environment: 
+            discovery.type: single-node
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - elk_search_data:/usr/share/elasticsearch/data
+        ports: 
+            - "9200:9200"
+            #node communication port to leave in internal network
+            #- "9300:9300"
+        networks: 
+            - elk
+    elk_kibana:
+        image: kibana:7.7.0
+        container_name: elk-kibana
+        environment:            
+            ELASTICSEARCH_HOSTS: http://elk-search:9200
+        #volumes:
+        #    - elk_kibana_data:/usr/share/kibana/config/
+        networks: 
+            - elk
+        ports: 
+            - "5601:5601"
+        depends_on: 
+            - elk_search
+    elk_log:
+        build:
+            context: .
+            dockerfile: ./Dockerfile-logstash
+        container_name: elk-log
+        image: elk-log:latest
+        environment: 
+            monitoring.elasticsearch.hosts: "http://elk-search:9200"
+            xpack.monitoring.enabled: "false"
+        # volumes not required for demo and test purpose
+        #volumes: 
+            #- elk_log_config:/usr/share/logstash/config/
+            #- elk_log_pipe_config:/usr/share/logstash/pipeline/
+        networks: 
+            - elk
+            - logging
+            - kafka-net
+        ports: 
+            - "5044:5044"
+            - "5045:5045"
+        #depends_on: 
+        #    - elk_search
+volumes:
+    elk_search_data:
+    elk_kibana_data:
+    elk_log_config:
+    elk_log_pipe_config:
+networks: 
+    elk:
+        name: elk-network      
+    logging:
+        name: logging-network  
+    kafka-net:
+        name: kafka-network

@@ -1,0 +1,14 @@
+# software ag microservices runtime server
+x-sag-is-services: &il-sag-is-services
+    sag-is:
+        build:
+            context: ../../infrastructure/sag-is/
+        image: demo-sag-ms-runtime
+        restart: unless-stopped
+        container_name: sag-is-ms-server
+        mem_limit: 1200M
+        memswap_limit: 2400M      
+        networks:
+            il-sag-is:
+            ipm-integration:    
+            <<: *all-ipm-apps-api-networks

@@ -1,0 +1,15 @@
+# mulesoft test server
+x-il-mule-services: &il-mule-services
+    mule-server-apps:
+        build:
+            context: ../../infrastructure/mule-server/mule-apps
+        #to build this image use mule-server from the examples in the sharepoint
+        image: mule-server:latest  
+        container_name: mule-server
+        mem_limit: 2048M
+        memswap_limit: 4096M   
+        restart: unless-stopped      
+        networks:
+            il-mule:
+            ipm-integration:
+            <<: *all-ipm-apps-api-networks

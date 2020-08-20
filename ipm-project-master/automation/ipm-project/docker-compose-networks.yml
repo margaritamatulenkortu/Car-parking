@@ -1,0 +1,57 @@
+# define application networks
+# please follow naming convention x-[app name]
+# this reference is used to connect IL platforms to the all apps for integration purpose
+x-ipm-apps-networks: &all-ipm-apps-api-networks
+    car-parking-api:
+    badge-api:
+    roomz-api:
+        
+x-app-car-parking-networks: &car-parking-networks
+    car-parking-api:
+    car-parking-ui:
+    car-parking-db:
+
+x-app-badge-networks: &badge-networks
+    badge-api:
+    badge-ui:
+    
+x-app-frontend-networks: &frontend-networks
+    frontend-ui:
+
+x-app-roomz-networks: &roomz-networks
+    roomz-api:
+    roomz-ui:
+    roomz-db:         
+# define infrastructure networks
+x-il-kafka-networks: &il-kafka-networks
+    il-kafka:
+
+x-il-api-gw-networks: &il-api-gw-networks
+    il-api-gw:       
+
+x-il-elk-networks: &il-elk-networks
+    il-elk:
+    il-elk-logstash:
+
+x-il-mule-networks: &il-mule-networks
+    il-mule:
+
+x-il-sag-is-networks: &il-il-sag-is-networks
+    il-sag-is:        
+
+networks:
+    ipm-api:
+    ipm-logging:
+    ipm-integration:    
+    <<: *all-ipm-apps-api-networks
+    <<: *car-parking-networks
+    <<: *badge-networks
+    <<: *roomz-networks
+    <<: *frontend-networks
+    # integration layer networks
+    <<: *il-elk-networks
+    <<: *il-kafka-networks
+    <<: *il-mule-networks
+    <<: *il-il-sag-is-networks
+    <<: *il-api-gw-networks
+# end of networks definition

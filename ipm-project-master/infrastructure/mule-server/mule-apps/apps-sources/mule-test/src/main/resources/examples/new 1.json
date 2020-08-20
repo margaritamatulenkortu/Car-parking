@@ -1,0 +1,7 @@
+{
+        "hostname": get_hostname(),
+        "available":psutil.virtual_memory().available,
+        "total":psutil.virtual_memory().total,
+        "cpu":psutil.cpu_percent(),
+        "message": "Hello from Flask"
+        }
